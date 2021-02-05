@@ -8,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <queue>
 
 using namespace std;
 
@@ -140,22 +141,25 @@ int main() {
     if (input.length() > 0)
         inputVec.push_back(input);
     TreeNode* root = (inputVec[0] == "null") ? nullptr : new TreeNode(stoi(inputVec[0]));
-    for(int i = 1; i < inputVec.size(); i ++) {
-        if (inputVec[i] == "null")
-            continue;
-        vector<int> dirs;
-        int line = i + 1;
-        while (line != 1) {
-            dirs.push_back(line);
-            line /= 2;
+    queue<TreeNode*> inputQ;
+    inputQ.push(root);
+    int vecI = 1;
+    while (!inputQ.empty() && vecI < inputVec.size()) {
+        int inputQSize = inputQ.size();
+        for (int t = 0; t < inputQSize; t ++) {
+            TreeNode* node = inputQ.front(); inputQ.pop();
+            cout << vecI << endl;
+            if (node != nullptr) {
+                if (inputVec[vecI] != "null")
+                    node->left = new TreeNode(stoi(inputVec[vecI]));
+                inputQ.push(node->left);
+                vecI ++;
+                if (inputVec[vecI] != "null")
+                    node->right = new TreeNode(stoi(inputVec[vecI]));
+                inputQ.push(node->right);
+                vecI ++;
+            }
         }
-        TreeNode* head = root;
-        for (auto it = dirs.rbegin(); (it + 1) != dirs.rend(); it ++)
-            head = (*it % 2 == 1) ? head->right : head->left;
-        if (dirs[0] % 2 == 1)
-            head->right = new TreeNode(stoi(inputVec[i]));
-        else
-            head->left = new TreeNode(stoi(inputVec[i]));
     }
     printBST("input", root);
     cin >> input >> input >> input;
