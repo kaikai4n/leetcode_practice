@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -75,18 +76,16 @@ public:
             bool isOdd = (level % 2 == 1);
             vector<int>& dpNow = isOdd ? dp0 : dp1;
             vector<int>& dpNext = isOdd ? dp1 : dp0;
-            dpNext.push_back(triangle[level][0] + dpNow[0]);
+            // pad volume of dp to current width
+            while (dpNext.size() < width)
+                dpNext.push_back(0);
+            dpNext[0] = triangle[level][0] + dpNow[0];
             for (int col = 1; col < width - 1; col ++)
-                dpNext.push_back(triangle[level][col] + min(dpNow[col - 1], dpNow[col]));
-            dpNext.push_back(triangle[level][width - 1] + dpNow[width - 2]);
-            dpNow.clear();
+                dpNext[col] = triangle[level][col] + min(dpNow[col - 1], dpNow[col]);
+            dpNext[width - 1] = triangle[level][width - 1] + dpNow[width - 2];
         }
         vector<int> finalDp = (triangle.size() % 2 == 1) ? dp0 : dp1;
-        int res = finalDp[0];
-        for (int val: finalDp)
-            if (val < res)
-                res = val;
-        return res;
+        return *min_element(finalDp.begin(), finalDp.end());
     }
 };
 
