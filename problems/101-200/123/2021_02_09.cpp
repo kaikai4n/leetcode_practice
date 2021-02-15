@@ -1,8 +1,8 @@
 /*
  * https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii
  * time: O(n), space: O(n)
- * Runtime: 124 ms, faster than 91.75% of C++ online submissions
- * Memory Usage: 83 MB, less than 21.63% of C++ online submissions
+ * Runtime: 128 ms, faster than 87.12% of C++ online submissions
+ * Memory Usage: 79.8 MB, less than 40.64% of C++ online submissions
 */
 #include <iostream>
 #include <string>
@@ -72,30 +72,32 @@ public:
         // First construct left-to-right and right-to-left single 
         // maximum profit .
         // left-to-right
-        vector<int> lMaxVal{0};
+        vector<pair<int, int>> lMaxVal{make_pair(-1, 0)};
         for (int lMin = nonDecPairs[0].first, i = 0; i < nonDecPairs.size() - 1; i ++) {
             if (nonDecPairs[i].first < lMin)
                 lMin = nonDecPairs[i].first;
-            if (nonDecPairs[i].second - lMin > lMaxVal.back())
-                lMaxVal.push_back(nonDecPairs[i].second - lMin);
-            else
-                lMaxVal.push_back(lMaxVal.back());
+            if (nonDecPairs[i].second - lMin > lMaxVal.back().second)
+                lMaxVal.push_back(make_pair(i, nonDecPairs[i].second - lMin));
         }
         // right-to-left
-        vector<int> rMaxVal(nonDecPairs.size(), 0);
+        vector<pair<int, int>> rMaxVal{make_pair(nonDecPairs.size(), 0)};
         for (int rMax = nonDecPairs.back().second, i = nonDecPairs.size() - 1; i > 0; i --) {
             if (nonDecPairs[i].second > rMax)
                 rMax = nonDecPairs[i].second;
-            if (rMax - nonDecPairs[i].first > rMaxVal.back())
-                rMaxVal[i] = rMax - nonDecPairs[i].first;
-            else
-                rMaxVal[i] = rMaxVal.back();
+            if (rMax - nonDecPairs[i].first > rMaxVal.back().second)
+                rMaxVal.push_back(make_pair(i, rMax - nonDecPairs[i].first));
         }
         // Find the max profit by summing the two solutions
         int maxProfit = 0;
-        for (int i = 1; i < lMaxVal.size(); i ++)
-            if (lMaxVal[i] + rMaxVal[i] > maxProfit)
-                maxProfit = lMaxVal[i] + rMaxVal[i];
+        for (int l = 1, r = rMaxVal.size() - 1; l < lMaxVal.size(); l ++) {
+            while (lMaxVal[l].first >= rMaxVal[r].first) {
+                r --;
+                if (r == 0)
+                    break;
+            }
+            if (lMaxVal[l].second + rMaxVal[r].second > maxProfit)
+                maxProfit = lMaxVal[l].second + rMaxVal[r].second;
+        }
         return maxProfit;
     }
 };
