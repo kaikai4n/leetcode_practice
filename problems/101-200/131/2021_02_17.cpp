@@ -5,7 +5,9 @@
  *      is a palindrome or not. That is, dp[i][j] is true if and
  *      only if s[i:j] is a palindrome. The construction time is
  *      O(S^2) and the space is O(S^2).
- *  2. Backtracking all the solutions return them.
+ *  2. Backtracking all the solutions return them. The backtracking
+ *      takes O(2^S * S) time, where 2^S for partition and S for
+ *      substr process.
  * Runtime: 96 ms, faster than 87.78% of C++ online submissions
  * Memory Usage: 53.5 MB, less than 63.41% of C++ online submissions
 */ 
