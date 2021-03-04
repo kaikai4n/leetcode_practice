@@ -1,6 +1,6 @@
 /*
  * https://leetcode.com/problems/balanced-binary-tree/
- * time: O(n), space: O(log(n))
+ * time: O(n), space: O(n), worst case for degeneration to link list
  * Runtime: 8 ms, faster than 96.64% of C++ online submissions
  * Memory Usage: 21.9 MB, less than 65.63% of C++ online submissions
 */
