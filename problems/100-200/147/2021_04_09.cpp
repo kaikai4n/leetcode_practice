@@ -2,8 +2,8 @@
  * https://leetcode.com/problems/insertion-sort-list/
  * Method: Use a dummy to implement the insertion sort easier.
  * time: O(n^2), space: O(1)
- * Runtime: 48 ms, faster than 42.70% of C++ online submissions
- * Memory Usage: 9.5 MB, less than 96.15% of C++ online submissions
+ * Runtime: 16 ms, faster than 86.06% of C++ online submissions
+ * Memory Usage: 9.6 MB, less than 72.87% of C++ online submissions
 */
 
 #include <iostream>
@@ -25,20 +25,22 @@ struct ListNode {
 class Solution {
 public:
     ListNode* insertionSortList(ListNode* head) {
+        if (head == nullptr)
+            return head;
         // create dummy head
         head = new ListNode(0, head);
-        ListNode *prev = head;
-        ListNode *curr = head->next;
+        ListNode *prev = head->next;
+        ListNode *curr = head->next->next;
         while (curr != nullptr) {
             ListNode *next = curr->next;
-            ListNode *insertHead = head;
-            while (insertHead->next != nullptr && insertHead->next->val < curr->val)
-                insertHead = insertHead->next;
-            if (insertHead == prev) {
+            if (prev->val <= curr->val) {
                 // no insertion requires
                 prev = curr;
                 curr = next;
             } else {
+                ListNode *insertHead = head;
+                while (insertHead->next != nullptr && insertHead->next->val < curr->val)
+                    insertHead = insertHead->next;
                 /*
                  *     2     ->   4   ->   3   ->  5
                  * insertHead   prev     curr     next
